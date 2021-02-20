@@ -1,0 +1,38 @@
+{
+  "name": "Kantronics KAM-98 - 2m APRS"
+  , "init-commands": [
+    "ECHO OFF"
+    , "INT TERMINAL"
+    , "CD SOFTWARE"
+    , "LFADD OFF"
+    , "AUTOLF ON"
+    , "MONITOR ON"
+    , "MCON OFF"
+    , "MALL ON"
+    , "MCOM OFF"
+    , "MXMIT OFF"
+    , "BEACON EVERY 0"
+    , "BLT EVERY 0"
+    , "UIDIGI OFF WIDE1-1"
+    , "DIGIPEAT OFF"
+    , "UIDWAIT OFF"
+    , "PID OFF"
+    , "HEADERLN OFF"
+    , "PASSALL OFF"
+    , "FLOW ON"
+    , "HID OFF"
+    , "MSTAMP OFF"
+    , "NEWMODE OFF"
+    , "XFLOW ON"
+    , "HBAUD 1200"
+  ]
+  , "exit-commands": [
+    "DIGI OFF'"
+    , "UIDIGI OFF WIDE1-1"
+    , "BEACON EVERY 0"
+    , "HID OFF"
+    , "CD INTERNAL"
+    , "INTFACE TERMINAL"
+    , "ECHO ON"
+  ]
+}
