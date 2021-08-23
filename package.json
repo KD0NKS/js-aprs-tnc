@@ -1,7 +1,7 @@
 {
   "author": "afairhurst",
   "license": "ISC",
-  "name": "js-tnc",
+  "name": "js-aprs-tnc",
   "version": "0.0.1",
   "homepage": "https://github.com/KD0NKS/js-aprs-tnc#readme",
   "description": "NodeJs library for interfacing a tnc.",
