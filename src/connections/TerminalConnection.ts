@@ -1,69 +1,53 @@
-import EventEmitter from 'events'
-import SerialPort, { OpenOptions } from 'serialport'
-import { TerminalConfiguration } from '../configurations/TerminalConfiguration';
+import _ from "lodash"
+import SerialPort from 'serialport'
+import { TerminalSettings } from '../configurations/TerminalSettings'
 
 const Readline = require('@serialport/parser-readline')
 
-export class TerminalConnection extends EventEmitter {
-    private _connection: SerialPort
-    private _terminalConfig: TerminalConfiguration
+export class TerminalConnection extends SerialPort {
+    private _pipe: any
+    private _options: TerminalSettings
 
-    constructor(path: string, terminalConfiguration: TerminalConfiguration, options?: OpenOptions, callback?: SerialPort.ErrorCallback) {
-        super()
-        let isInitComplete = false
-        const autoOpen = options.autoOpen ?? true
+    constructor(path: string, options: TerminalSettings, callback?: SerialPort.ErrorCallback) {
+        super(path, options, callback)
 
-        this._terminalConfig = terminalConfiguration
+        this._options = options
+        this._pipe = this.pipe(new Readline({ delimiter: this._options.messageDelimeter }))
 
-        //options.autoOpen = false
-        this._connection = new SerialPort(path, options, callback)
+        this.on('open', (err) => {
+            if (err)
+                throw err
 
-        /*
-        this._connection.open((err) => {
-            if(err)
-                this.emit('error', err)
-        })
-        */
-
-        this._connection.on('open', () => {
-            const tc = this
-            const p1 = this._connection.pipe(new Readline())
-
-            p1.on('data', function (data: any) {
-                if (this._isInitComplete)
-                    tc.emit('data', data)
+            _.forEach(this._options.initCommands, (command: string) => {
+                this.sendCommand(command)
             })
-
-            terminalConfiguration?.initCommands.forEach(cmd => {
-                this.sendCommand(cmd)
-            })
-
-            isInitComplete = true
-
-            tc.emit('open')
         })
 
-        if(autoOpen === true)
-            this._connection.open()
+        this._pipe.on('data', (data: string) => {
+            this.emit('packet', data.trim())
+        })
     }
 
-    private sendCommand(command: string, callback?: any) {
-        this._connection.write(`${command}\r`, 'ascii', err => {
-            if (err)
-                console.log(err)
-            else
+    public sendCommand(command: string, callback?: any) {
+        this.write(`${command}${this._options.messageDelimeter}`, this._options.charset, err => {
+            if(err) {
+                throw err
+            } else {
                 this.emit('sent', `${command}`)
+            }
         })
 
-        if (callback)
+        if(callback)
             callback()
     }
 
-    public end(callback?: () => void) {
-        this._terminalConfig.exitCommands.forEach(cmd => {
-            this.sendCommand(cmd)
+    public override end(cb?: () => void): void {
+        _.forEach(this._options.exitCommands, (command: string) => {
+            this.sendCommand(command)
         })
 
-        this._connection.end(callback)
+        setTimeout(() => {
+            super.end(cb)
+        }, 1000)
     }
 }
