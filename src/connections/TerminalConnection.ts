@@ -2,7 +2,7 @@ import _ from "lodash"
 import SerialPort from 'serialport'
 import { TerminalSettings } from '../configurations/TerminalSettings'
 
-const Readline = require('@serialport/parser-readline')
+const Delimiter = require('@serialport/delimiter-readline')
 
 export class TerminalConnection extends SerialPort {
     private _pipe: any
@@ -12,7 +12,7 @@ export class TerminalConnection extends SerialPort {
         super(path, options, callback)
 
         this._options = options
-        this._pipe = this.pipe(new Readline({ delimiter: this._options.messageDelimeter }))
+        this._pipe = this.pipe(new Delimiter({ delimiter: this._options.messageDelimeter }))
 
         this.on('open', (err) => {
             if (err)
