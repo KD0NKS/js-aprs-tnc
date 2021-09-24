@@ -6,3 +6,7 @@ This project is an attempt to provide utilities to communicate between software 
 
 ## Dependencies
 [SerialPort](https://serialport.io)
+
+## Notes
+### Ubuntu/Linux to read/write the serial connection, you may need to add users to dialout group.
+sudo adduser second_user dialout

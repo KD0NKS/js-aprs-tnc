@@ -2,7 +2,7 @@ import _ from "lodash"
 import SerialPort from 'serialport'
 import { TerminalSettings } from '../configurations/TerminalSettings'
 
-const Delimiter = require('@serialport/delimiter-readline')
+const Delimiter = require('@serialport/parser-delimiter')
 
 export class TerminalConnection extends SerialPort {
     private _pipe: any
