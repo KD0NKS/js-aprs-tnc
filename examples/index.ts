@@ -1,4 +1,4 @@
-import { TerminalConnection } from '../src/connections/TerminalConnection'
+import { TerminalSocket } from '../src/connections/TerminalSocket'
 import reader from 'readline'
 import { TerminalSettings } from '../src/configurations/TerminalSettings'
 
@@ -18,7 +18,7 @@ testSettings.initCommands = ["ECHO OFF", "INTFACE TERMINAL", "CD SOFTWARE", "LFA
 testSettings.messageDelimeter = '\r'
 testSettings.rtscts = true
 
-const conn = new TerminalConnection('COM5'
+const conn = new TerminalSocket('COM5'
     , testSettings
     , (err: any) => {
         if (err)
