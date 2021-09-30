@@ -4,7 +4,7 @@ import { TerminalSettings } from '../configurations/TerminalSettings'
 
 const Delimiter = require('@serialport/parser-delimiter')
 
-export class TerminalConnection extends SerialPort {
+export class TerminalSocket extends SerialPort {
     private _pipe: any
     private _options: TerminalSettings
 
@@ -24,7 +24,7 @@ export class TerminalConnection extends SerialPort {
         })
 
         this._pipe.on('data', (data: string) => {
-            this.emit('packet', data.trim())
+            this.emit('packet', data.toString().trim())
         })
     }
 
