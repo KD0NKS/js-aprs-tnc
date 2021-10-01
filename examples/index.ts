@@ -41,7 +41,7 @@ conn.open()
 
 process.stdin.on('keypress', (str, key) => {
     if (key.ctrl && key.name === 'c') {
-        conn.end(() => {
+        conn.close(() => {
             process.exit()
         })
     }
