@@ -42,25 +42,25 @@ export class TerminalSocket extends SerialPort {
     }
 
     public override close(cb?: () => void): void {
-        this.runExitCommands()
+        try {
+            this.runExitCommands()
+        } catch(err) {
+            throw err
+        }
 
         setTimeout(() => {
-            super.end(cb)
-        }, 1000)
-    }
-
-    public override end(cb?: () => void): void {
-        this.runExitCommands()
-
-        setTimeout(() => {
-            super.end(cb)
+            super.close(cb)
         }, 1000)
     }
 
     private runExitCommands() {
-        _.forEach(this._options.exitCommands, (command: string) => {
-            this.sendCommand(command)
-        })
+        try {
+            _.forEach(this._options.exitCommands, (command: string) => {
+                    this.sendCommand(command)
+                })
+        } catch (err) {
+            throw err;
+        }
 
         return
     }
