@@ -8,8 +8,10 @@ process.stdin.setRawMode(true);
 const testSettings: TerminalSettings = new TerminalSettings()
 testSettings.autoOpen = false
 testSettings.baudRate = 9600
+testSettings.callsign = 'N0CALL'
 testSettings.dataBits = 8
 testSettings.parity = 'none'
+testSettings.myCallCommand = 'MYCALL'
 testSettings.stopBits = 1
 testSettings.exitCommands = ["DIGI OFF", "UIDIGI OFF WIDE1-1", "BEACON EVERY 0", "HID OFF", "CD INTERNAL", "INTFACE TERMINAL", "ECHO ON"]
 testSettings.initCommands = ["ECHO OFF", "INTFACE TERMINAL", "CD SOFTWARE", "LFAOFF", "AUTOLF ON", "MONITOR ON", "MCON OFF"

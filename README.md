@@ -3,9 +3,11 @@
 APRS is a registered trademark Bob Bruninga, WB4APR.
 
 This project is an attempt to provide utilities to communicate between software and a TNC.
+It is still very much under experimental development and may have breaking changes with any given release.
 
 ## Usage
 See examples folder.
+Make sure to set the callsign and myCallCommand settings to proper values.
 
 ## Dependencies
 [SerialPort](https://serialport.io)
