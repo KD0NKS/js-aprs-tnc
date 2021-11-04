@@ -8,6 +8,7 @@ export class TerminalSocket extends SerialPort {
     private _pipe: any
     private _options: TerminalSettings
 
+    // TODO: override callback
     constructor(path: string, options: TerminalSettings, callback?: SerialPort.ErrorCallback) {
         super(path, options, callback)
 
@@ -18,17 +19,21 @@ export class TerminalSocket extends SerialPort {
             if (err)
                 throw err
 
-            _.forEach(this._options.initCommands, (command: string) => {
+            _.each(this._options.initCommands, (command: string) => {
                 this.sendCommand(command)
             })
+
+            this.sendCommand(this._options.myCallCommand)
         })
 
         this._pipe.on('data', (data: string) => {
             this.emit('packet', data.toString().trim())
         })
+
+        // TODO: Callback
     }
 
-    public sendCommand(command: string, callback?: any) {
+    public sendCommand(command: string, callback?: any) {   // TODO: Callback
         this.write(`${command}${this._options.messageDelimeter}`, this._options.charset, err => {
             if(err) {
                 throw err
@@ -36,9 +41,25 @@ export class TerminalSocket extends SerialPort {
                 this.emit('sent', `${command}`)
             }
         })
+    }
 
-        if(callback)
-            callback()
+    public sendMyCallCommand(callback?: any) {
+        if(this._options.myCallCommand != null
+                && this._options.myCallCommand.trim().length > 0
+                && this._options.callsign != null
+                && this._options.callsign.trim().length > 0
+                ) {
+            this.sendCommand(this._options.myCallCommand, callback)
+        }
+        /*
+        else if(this._options.myCallCommand == null
+                || this._options.myCallCommand.trim().length == 0) {
+            throw('No myCallCommand defined')
+        } else if(this._options.callsign == null
+                || this._options.callsign.trim().length == 0) {
+            throw('No callsign defined')
+        }
+        */
     }
 
     public override close(cb?: () => void): void {
@@ -53,7 +74,7 @@ export class TerminalSocket extends SerialPort {
         }, 1000)
     }
 
-    private runExitCommands() {
+    private runExitCommands() { // TODO: Callback
         try {
             _.forEach(this._options.exitCommands, (command: string) => {
                     this.sendCommand(command)
