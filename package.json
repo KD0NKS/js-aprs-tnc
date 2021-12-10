@@ -36,6 +36,6 @@
     "@types/serialport": "^8.0.2",
     "install": "^0.13.0",
     "lodash": "^4.17.21",
-    "serialport": "^9.2.5"
+    "serialport": "^9.2.7"
   }
 }
