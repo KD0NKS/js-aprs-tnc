@@ -1,19 +1,18 @@
 import _ from "lodash"
-import SerialPort from 'serialport'
+import { SerialPort } from 'serialport'
+import { DelimiterParser } from '@serialport/parser-delimiter'
 import { TerminalSettings } from '../configurations/TerminalSettings'
-
-const Delimiter = require('@serialport/parser-delimiter')
 
 export class TerminalSocket extends SerialPort {
     private _pipe: any
     private _options: TerminalSettings
 
     // TODO: override callback
-    constructor(path: string, options: TerminalSettings, callback?: SerialPort.ErrorCallback) {
-        super(path, options, callback)
+    constructor(options: TerminalSettings, openCallback?: ErrorCallback) {
+        super(options, openCallback)
 
         this._options = options
-        this._pipe = this.pipe(new Delimiter({ delimiter: this._options.messageDelimeter }))
+        this._pipe = this.pipe(new DelimiterParser({ delimiter: this._options.messageDelimeter }))
 
         this.on('open', (err) => {
             if (err)
@@ -62,16 +61,14 @@ export class TerminalSocket extends SerialPort {
         */
     }
 
-    public override close(cb?: () => void): void {
+    public override close(callback?: ErrorCallback | undefined, disconnectError?: Error | null): void {
         try {
             this.runExitCommands()
-        } catch(err) {
-            throw err
+        } finally {
+            setTimeout(() => {
+                super.close(callback, disconnectError)
+            }, 1000)
         }
-
-        setTimeout(() => {
-            super.close(cb)
-        }, 1000)
     }
 
     private runExitCommands() { // TODO: Callback

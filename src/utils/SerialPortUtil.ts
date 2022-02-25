@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import SerialPort from 'serialport'
+import { SerialPort } from 'serialport'
 
 export class SerialPortUtil {
     static getAvailableSerialPorts() {
