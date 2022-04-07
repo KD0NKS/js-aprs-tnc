@@ -1,4 +1,7 @@
+import { v4 as uuidV4 } from 'uuid'
+
 export class TerminalSettings {
+    public id: string | number = uuidV4()
     public endOnClose?: boolean = false
     public path: string
     public hupcl?: boolean = true

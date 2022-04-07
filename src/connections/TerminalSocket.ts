@@ -1,4 +1,6 @@
 import _ from "lodash"
+import { v4 as uuidV4 } from 'uuid'
+
 import { SerialPort } from 'serialport'
 import { DelimiterParser } from '@serialport/parser-delimiter'
 import { TerminalSettings } from '../configurations/TerminalSettings'
@@ -6,11 +8,13 @@ import { TerminalSettings } from '../configurations/TerminalSettings'
 export class TerminalSocket extends SerialPort {
     private _pipe: any
     private _options: TerminalSettings
+    private _id: string | number
 
     // TODO: override callback
     constructor(options: TerminalSettings, openCallback?: ErrorCallback) {
         super(options, openCallback)
 
+        this._id = options.id ?? uuidV4()
         this._options = options
         this._pipe = this.pipe(new DelimiterParser({ delimiter: this._options.messageDelimeter }))
 
@@ -30,6 +34,10 @@ export class TerminalSocket extends SerialPort {
         })
 
         // TODO: Callback
+    }
+
+    public get id(): string | number {
+        return this._id
     }
 
     public sendCommand(command: string, callback?: any) {   // TODO: Callback
