@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "install": "^0.13.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "serialport": "^10.3.0"
   }
 }
